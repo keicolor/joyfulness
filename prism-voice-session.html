@@ -502,9 +502,9 @@
 
   .close-copy h2 {
     font-family:'Shippori Mincho', serif;
-    font-size: clamp(24px, 4vw, 40px);
+    font-size: clamp(16px, 2.2vw, 26px);
     font-weight:800;
-    line-height:1.6;
+    line-height:2.0;
     color:var(--deep);
     margin-bottom:32px;
   }
@@ -539,6 +539,7 @@
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
+    pointer-events: none;
   }
 
   .btn {
@@ -614,6 +615,31 @@
   .btn:hover { background:var(--gold); color:var(--deep); }
 
   .cta-fine { font-size:12px; color:var(--soft); line-height:1.9; }
+
+  .cta-btn {
+    display:block;
+    width:100%;
+    background: linear-gradient(135deg, #FF6B8A 0%, #C060FF 50%, #40B4FF 100%);
+    color: #fff !important;
+    padding:22px 20px;
+    font-family:'Shippori Mincho', serif;
+    font-size:17px;
+    font-weight:600;
+    letter-spacing:.15em;
+    border:none;
+    cursor:pointer;
+    transition:all .3s;
+    margin-bottom:20px;
+    text-decoration:none !important;
+    text-align:center;
+    box-shadow: 0 4px 24px rgba(192,96,255,0.35);
+    border-radius:4px;
+  }
+  .cta-btn:hover {
+    opacity:0.85;
+    box-shadow: 0 8px 32px rgba(192,96,255,0.5);
+    transform:translateY(-2px);
+  }
 
   /* ─────────── FOOTER ─────────── */
   footer {
@@ -924,7 +950,7 @@
     <h2>あなたの才能と資質が、<br>迷わず輝き出す90分</h2>
     <div class="price">¥22,000</div>
     <p class="price-note">オンライン ／ 90分</p>
-    <a href="https://www.reservestock.jp/page/event_series/119635" target="_blank" rel="noopener" class="btn">セッションを申し込む →</a>
+    <a href="https://www.reservestock.jp/page/event_series/119635" target="_blank" rel="noopener" class="cta-btn">セッションを申し込む →</a>
   </div>
 </section>
 
