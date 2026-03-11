@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prism Voice Session | 本当の声が、あなたの進む方向を教えてくれる</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF7F2;
+    --warm: #FDF9F4;
+    --gold: #C9A96E;
+    --gold-light: #EAD9B8;
+    --deep: #19130F;
+    --mid: #4A3F35;
+    --soft: #8A7A6A;
+    --p1: #E8C4B8;
+    --p2: #B8D4E8;
+    --p3: #C8E0C4;
+    --p4: #E8D4C8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--deep);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300;
+    line-height: 2;
+    overflow-x: hidden;
+  }
+
+  /* ─────────── HERO ─────────── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 28px 80px;
+    background: var(--warm);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 50%,
+      rgba(201,169,110,0.10) 0%,
+      rgba(232,196,184,0.07) 35%,
+      rgba(184,212,232,0.05) 65%,
+      transparent 100%);
+    animation: pulse 9s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { transform: scale(1); opacity:.7; }
+    50%      { transform: scale(1.12); opacity:1; }
+  }
+
+  .hero-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    letter-spacing: .45em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 36px;
+    position: relative;
+  }
+
+  .hero h1 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(28px, 6vw, 60px);
+    font-weight: 800;
+    line-height: 1.5;
+    color: var(--deep);
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--gold);
+  }
+
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(17px, 2.8vw, 24px);
+    font-style: italic;
+    color: var(--soft);
+    margin-bottom: 52px;
+    position: relative;
+  }
+
+  .prism {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 52px;
+    position: relative;
+  }
+
+  .pd {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    animation: glit 3.5s ease-in-out infinite;
+  }
+  .pd:nth-child(1){background:var(--p1);animation-delay:0s}
+  .pd:nth-child(2){background:var(--p2);animation-delay:.4s}
+  .pd:nth-child(3){background:var(--p3);animation-delay:.8s}
+  .pd:nth-child(4){background:var(--p4);animation-delay:1.2s}
+  .pd:nth-child(5){background:var(--gold-light);animation-delay:1.6s}
+
+  @keyframes glit {
+    0%,100%{transform:scale(1);opacity:.5}
+    50%{transform:scale(1.6);opacity:1}
+  }
+
+  .hero-body {
+    max-width: 540px;
+    font-size: 16px;
+    color: var(--mid);
+    line-height: 2.2;
+    position: relative;
+  }
+
+  .hero-body strong { font-weight: 400; color: var(--deep); }
+
+  /* ─────────── SHARED ─────────── */
+  .label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    letter-spacing: .45em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+    display: block;
+  }
+
+  .section { padding: 100px 28px; }
+  .inner   { max-width: 700px; margin: 0 auto; }
+
+  h2.serif {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(24px, 4vw, 40px);
+    font-weight: 800;
+    line-height: 1.6;
+    color: var(--deep);
+    margin-bottom: 36px;
+  }
+
+  h2.serif em { font-style:normal; color:var(--gold); }
+
+  p.body {
+    font-size: 17px;
+    color: var(--mid);
+    line-height: 2.3;
+    margin-bottom: 24px;
+  }
+
+  /* ─────────── PAIN ─────────── */
+  .pain { background: var(--deep); }
+
+  .pain .label { color: var(--gold); }
+
+  .pain h2.serif { color: var(--cream); }
+
+  .pain p.body { color: rgba(250,247,242,.8); }
+
+  .pain-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 40px;
+  }
+
+  .pain-list li {
+    font-size: 17px;
+    color: rgba(250,247,242,.75);
+    line-height: 2;
+    padding-left: 22px;
+    position: relative;
+  }
+
+  .pain-list li::before {
+    content:'';
+    position:absolute;
+    left:0; top:13px;
+    width:7px; height:1px;
+    background: var(--gold);
+  }
+
+  /* ─────────── INSIGHT QUOTE ─────────── */
+  .insight {
+    background: var(--warm);
+    padding: 80px 28px;
+  }
+
+  .insight-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .big-q {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(20px, 3.5vw, 32px);
+    font-weight: 600;
+    line-height: 1.8;
+    color: var(--deep);
+    margin-bottom: 24px;
+  }
+
+  .big-q em { font-style:normal; color:var(--gold); }
+
+  .insight p.body { text-align:left; }
+
+  /* ─────────── PRISM EXPLAINER ─────────── */
+  .prism-explain { background: var(--cream); }
+
+  .prism-box {
+    border-left: 2px solid var(--gold-light);
+    padding: 36px 0 36px 36px;
+    margin-top: 16px;
+  }
+
+  .prism-box p { font-size:17px; color:var(--mid); line-height:2.2; margin-bottom:16px; }
+  .prism-box p:last-child { margin-bottom:0; }
+
+  /* ─────────── 3 APPROACHES ─────────── */
+  .approaches { background: var(--warm); }
+
+  .approach-list { list-style:none; display:flex; flex-direction:column; gap:48px; margin-top:8px; }
+
+  .approach-item { display:flex; gap:28px; align-items:flex-start; }
+
+  .approach-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--gold-light);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 44px;
+    text-align: right;
+  }
+
+  .approach-content h3 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--deep);
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
+  .approach-content p { font-size:16px; color:var(--mid); line-height:2.1; }
+
+  /* ─────────── VOICES ─────────── */
+  .voices { background: var(--cream); }
+
+  .voice-grid { display:flex; flex-direction:column; gap:0; margin-top:56px; }
+
+  .voice-card {
+    border-top: 1px solid var(--gold-light);
+    padding: 44px 0;
+    position: relative;
+  }
+
+  .voice-card:last-child { border-bottom: 1px solid var(--gold-light); }
+
+  .voice-hl {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 600;
+    color: var(--deep);
+    line-height: 1.7;
+    margin-bottom: 18px;
+  }
+
+  .voice-body {
+    font-size: 16px;
+    color: var(--mid);
+    line-height: 2.2;
+    margin-bottom: 16px;
+  }
+
+  .voice-tag {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    letter-spacing: .06em;
+    color: var(--soft);
+    font-style: italic;
+  }
+
+  /* ─────────── CHANGES ─────────── */
+  .changes { background: var(--warm); }
+
+  .changes-list { list-style:none; display:flex; flex-direction:column; gap:18px; margin-top:8px; }
+
+  .changes-list li {
+    font-size: 17px;
+    color: var(--mid);
+    line-height: 2;
+    padding-left: 24px;
+    position: relative;
+  }
+
+  .changes-list li::before {
+    content:'✦';
+    position:absolute;
+    left:0; top:3px;
+    font-size:10px;
+    color:var(--gold);
+  }
+
+  .changes-note {
+    margin-top: 40px;
+    padding: 32px;
+    border: 1px solid var(--gold-light);
+    background: var(--cream);
+  }
+
+  .changes-note p { font-size:15px; color:var(--mid); line-height:2.1; }
+
+  /* ─────────── FOR WHO ─────────── */
+  .forwho { background: var(--deep); }
+
+  .forwho .label { color:var(--gold); }
+  .forwho h2.serif { color:var(--cream); }
+
+  .forwho-list { list-style:none; display:flex; flex-direction:column; gap:18px; margin-top:8px; }
+
+  .forwho-list li {
+    font-size:17px;
+    color:rgba(250,247,242,.8);
+    line-height:2;
+    padding-left:24px;
+    position:relative;
+  }
+
+  .forwho-list li::before {
+    content:'';
+    position:absolute;
+    left:0; top:13px;
+    width:7px; height:1px;
+    background:var(--gold);
+  }
+
+  .forwho-close {
+    margin-top: 48px;
+    font-family:'Shippori Mincho', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gold);
+    line-height: 1.8;
+  }
+
+  /* ─────────── ABOUT ─────────── */
+  .about { background: var(--cream); }
+
+  .about-box { display:flex; gap:40px; align-items:flex-start; }
+
+  .about-avatar {
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: var(--gold-light);
+    flex-shrink: 0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Cormorant Garamond', serif;
+    font-size:28px;
+    color:var(--gold);
+    cursor: pointer;
+    border: 2px dashed var(--gold-light);
+    overflow: hidden;
+    transition: border-color .3s;
+    position: relative;
+  }
+  .about-avatar:hover { border-color: var(--gold); }
+
+  .about-text h3 {
+    font-family:'Shippori Mincho', serif;
+    font-size:20px;
+    font-weight:600;
+    color:var(--deep);
+    margin-bottom:8px;
+  }
+
+  .about-text p { font-size:16px; color:var(--mid); line-height:2.2; margin-bottom:14px; }
+
+  @media(max-width:520px){
+    .about-box { flex-direction:column; }
+  }
+
+  /* ─────────── CLOSE COPY ─────────── */
+  .close-copy {
+    background: var(--warm);
+    padding: 100px 28px;
+    text-align: center;
+  }
+
+  .close-inner { max-width: 580px; margin: 0 auto; }
+
+  .close-copy h2 {
+    font-family:'Shippori Mincho', serif;
+    font-size: clamp(24px, 4vw, 40px);
+    font-weight:800;
+    line-height:1.6;
+    color:var(--deep);
+    margin-bottom:32px;
+  }
+
+  .close-copy p { font-size:15px; color:var(--mid); line-height:2.3; margin-bottom:20px; }
+
+  /* ─────────── CTA ─────────── */
+  .cta {
+    background: var(--cream);
+    padding: 100px 28px;
+    text-align: center;
+  }
+
+  .cta-box {
+    max-width: 520px;
+    margin: 0 auto;
+    border: 1px solid var(--gold-light);
+    padding: 64px 44px;
+    background: var(--warm);
+  }
+
+  .cta .label { color:var(--gold); text-align:center; }
+
+  .cta h2 {
+    font-family:'Shippori Mincho', serif;
+    font-size: clamp(22px, 3.5vw, 32px);
+    font-weight:800;
+    color:var(--deep);
+    line-height:1.6;
+    margin-bottom:40px;
+  }
+
+  .price {
+    font-family:'Cormorant Garamond', serif;
+    font-size:52px;
+    font-weight:300;
+    color:var(--deep);
+    margin-bottom:6px;
+    letter-spacing:-.01em;
+  }
+
+  .price-note {
+    font-size:12px;
+    color:var(--soft);
+    letter-spacing:.1em;
+    margin-bottom:44px;
+  }
+
+  .btn {
+    display:block;
+    width:100%;
+    background:var(--deep);
+    color:var(--cream);
+    padding:20px;
+    font-family:'Shippori Mincho', serif;
+    font-size:16px;
+    font-weight:600;
+    letter-spacing:.15em;
+    border:none;
+    cursor:pointer;
+    transition:all .3s;
+    margin-bottom:20px;
+    text-decoration:none;
+    text-align:center;
+  }
+
+  .btn:hover { background:var(--gold); color:var(--deep); }
+
+  .cta-fine { font-size:12px; color:var(--soft); line-height:1.9; }
+
+  /* ─────────── FOOTER ─────────── */
+  footer {
+    background:var(--deep);
+    padding:56px 24px;
+    text-align:center;
+  }
+
+  .footer-logo {
+    font-family:'Cormorant Garamond', serif;
+    font-size:18px;
+    letter-spacing:.3em;
+    color:var(--gold);
+    margin-bottom:16px;
+  }
+
+  footer p { font-size:11px; color:var(--soft); letter-spacing:.1em; }
+
+  /* ─────────── FADE ─────────── */
+  .fi {
+    opacity:0;
+    transform:translateY(20px);
+    transition:opacity .85s ease, transform .85s ease;
+  }
+  .fi.on { opacity:1; transform:translateY(0); }
+
+  /* ─────────── MOBILE ─────────── */
+  @media (max-width: 640px) {
+    body { font-size: 17px; }
+    .section { padding: 72px 22px; }
+    .hero { padding: 80px 22px 64px; }
+    .hero-body { font-size: 17px; line-height: 2.2; }
+    p.body { font-size: 17px; line-height: 2.3; }
+    .pain-list li { font-size: 17px; }
+    .prism-box p { font-size: 17px; }
+    .approach-content h3 { font-size: 17px; }
+    .approach-content p { font-size: 17px; }
+    .voice-hl { font-size: 18px; }
+    .voice-body { font-size: 17px; }
+    .changes-list li { font-size: 17px; }
+    .forwho-list li { font-size: 17px; }
+    .about-text p { font-size: 17px; }
+    .close-copy p { font-size: 17px; }
+    .changes-note p { font-size: 17px; }
+    .cta-box { padding: 48px 24px; }
+    .inner { max-width: 100%; }
+    .approach-item { gap: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <span class="hero-label">Prism Voice Session</span>
+  <h1>
+    もう、人生の正解を<br>
+    探さなくていい。<br>
+    <em>本当の声が、</em><br>
+    <em>あなたの進む方向を</em><br>
+    <em>教えてくれる。</em>
+  </h1>
+  <p class="hero-sub">90分で、あなたの光を取り戻す</p>
+  <div class="prism">
+    <div class="pd"></div><div class="pd"></div><div class="pd"></div>
+    <div class="pd"></div><div class="pd"></div>
+  </div>
+  <p class="hero-body">
+    ちゃんと考えてきたはずです。<br>
+    ちゃんと悩んで、選んで、進んできたはずです。<br><br>
+    それなのに、<strong>なぜか、しっくりこない。</strong><br>
+    なぜか、力が続かない。<br>
+    なぜか、「これでいいんだろうか？」が消えない。<br><br>
+    それは、あなたの努力が足りないからではありません。
+  </p>
+</section>
+
+<!-- PAIN -->
+<section class="section pain">
+  <div class="inner fi">
+    <span class="label">Does this sound like you?</span>
+    <h2 class="serif">正解を探し続けるほど、<br>迷いは深くなる。</h2>
+    <p class="body">「間違えたくない」「失敗したくない」「ちゃんとした選択をしたい」——そう思うほど、人は外の情報、外の評価、外の基準を探しに行きます。</p>
+    <p class="body">でも、どれだけ調べても、どれだけ学んでも、どれだけ人に聞いても、最後に残るのはいつも同じ問いです。</p>
+    <ul class="pain-list">
+      <li>方向性に迷っている</li>
+      <li>同じ課題に何度もぶつかる</li>
+      <li>がんばってきたのに、なぜか満たされない</li>
+      <li>やるべきことは分かるのに、動けない</li>
+      <li>才能を活かして生きていきたい、でも怖い</li>
+      <li>人の期待ではなく、自分の基準で選びたい</li>
+    </ul>
+  </div>
+</section>
+
+<!-- INSIGHT -->
+<section class="insight">
+  <div class="insight-inner fi">
+    <p class="big-q">
+      実は、迷いの正体は<br>
+      「答えがないこと」ではありません。<br><br>
+      答えはあるのに、<br>
+      <em>それを採用せずに生きてきたこと。</em>
+    </p>
+    <p class="body" style="text-align:center; margin-top:16px;">
+      「……だよね」「やっぱり、そうか」「薄々、気づいてた」<br>
+      そんな感覚が、あなたの<strong>「本当の声」</strong>です。<br>
+      消えたわけでも、なくなったわけでもない。<br>
+      ずっと、あなたの中にあった。ただ、押し込められていただけなのです。
+    </p>
+  </div>
+</section>
+
+<!-- PRISM EXPLAINER -->
+<section class="section prism-explain">
+  <div class="inner fi">
+    <span class="label">What is Prism?</span>
+    <h2 class="serif">プリズムとは、<br><em>あなたの光を</em><br><em>見える形にするもの。</em></h2>
+    <div class="prism-box">
+      <p>プリズムは、ひとつの光の中にある色を、見える形にしてくれるものです。</p>
+      <p>人も同じです。本当は、誰の中にも最初からその人らしい光があります。けれど、思い込みや我慢、役割や恐れが重なると、その光を通すプリズムが曇ってしまい、自分でも見えなくなってしまう。</p>
+      <p>このセッションで行うのは、あなたを変えることではありません。<br><strong>曇ってしまったプリズムを磨き、本来の光がまっすぐ映る状態に戻すこと。</strong></p>
+      <p>あなたの光は、最初から、ずっと輝き続けているのです。あとは、その光に気づいてあげるだけ。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3 APPROACHES -->
+<section class="section approaches">
+  <div class="inner fi">
+    <span class="label">3 Approaches</span>
+    <h2 class="serif">セッションで行う、<br>３つのアプローチ</h2>
+    <ul class="approach-list">
+      <li class="approach-item">
+        <div class="approach-num">1</div>
+        <div class="approach-content">
+          <h3>天の声を受け取る｜Saniwa Card</h3>
+          <p>まず、天からのメッセージを受け取ります。「本当は、いま何と向き合う時なのか」が示されます。目の前の悩みではなく、その奥にある——避けてきたテーマや、薄々気づいていた課題に、自然と意識が向く時間です。</p>
+        </div>
+      </li>
+      <li class="approach-item">
+        <div class="approach-num">2</div>
+        <div class="approach-content">
+          <h3>心の声を可視化する｜RYB Color Reading</h3>
+          <p>そのテーマに対して、心（無意識）が本当はどう感じているのかを色を通して確かめていきます。色の前では、思考でごまかすことができません。嘘のつけない本音が、ここではっきりと見えてきます。</p>
+        </div>
+      </li>
+      <li class="approach-item">
+        <div class="approach-num">3</div>
+        <div class="approach-content">
+          <h3>魂の声を統合する｜Soul Blueprint</h3>
+          <p>その本音の向いている先が、あなたの魂の方向性（資質・才能）と一致しているかを確かめます。自分にウソのない、魂が喜ぶ方向だと、腑に落ちる感覚が残ります。</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- VOICES -->
+<section class="section voices">
+  <div class="inner">
+    <div class="fi">
+      <span class="label">Voices from clients</span>
+      <h2 class="serif">受けた方たちの、<br>リアルな言葉</h2>
+    </div>
+    <div class="voice-grid">
+
+      <div class="voice-card fi">
+        <p class="voice-hl">「ああ、生きてきてよかったな。全部これでよかったんだな。」</p>
+        <p class="voice-body">セッションのあと、その日はずっとほこほこしていて、次の日も自然に笑みがこぼれて、体が軽くなったようでした。こんなに自分のことが大好きで涙が出たのは、初めてだったかもしれません。</p>
+        <p class="voice-body">「そしてもう、迷わないよ。くじけそうになっても、ここに戻ってくればいいだけなんだものね。」</p>
+        <span class="voice-tag">▷ 自己肯定感の深い回復・迷いからの解放</span>
+      </div>
+
+      <div class="voice-card fi">
+        <p class="voice-hl">「自分らしさを取り違えてませんか？と言われたこと。」</p>
+        <p class="voice-body">自分で自分を捉えきれていなかったことに気づきました。クライアントさんには伝えていることなのに、「自分らしさ」ってスッと答えられなかった。大きな宿命を、いろんな角度から突きつけられるようなセッションでした。自分ではここまで辿り着けなかったです。</p>
+        <span class="voice-tag">▷ 自分らしさの再発見・魂レベルの気づき</span>
+      </div>
+
+      <div class="voice-card fi">
+        <p class="voice-hl">「自分で自分を苦しめる生き方はやめようと、決断できました。」</p>
+        <p class="voice-body">自分の本音に背くから、心がザワザワしていることに気づくことができた。今は恐れずに、一つ一つ丁寧に取り組んでいきたい自分を大切にして生きようと行動しています。本来の自分のメッセージを受け取ることができ、ホッとしているところです。</p>
+        <span class="voice-tag">▷ 使命の明確化・本音との和解</span>
+      </div>
+
+      <div class="voice-card fi">
+        <p class="voice-hl">「思ってた自分以上の私に出会えた。こんな私もいたのね〜、すごいじゃん！」</p>
+        <p class="voice-body">過去の経験が今の自分に繋がっている大切なものだったとわかり、まっすぐ道が見えてきた。自分をより深く知ることができて、わくわくしています。</p>
+        <span class="voice-tag">▷ 自己発見の喜び・前進する明確さ</span>
+      </div>
+
+      <div class="voice-card fi">
+        <p class="voice-hl">「セッション後も、じわじわ浸透して、いつの間にかそれになってる。」</p>
+        <p class="voice-body">セッションの時だけ、ではなく、その後も馴染むような仕掛けをしてくれているから、気がつけばそれになってる。早速後押しかのように、その部分に注目してくださる方々が現れたりして、どんどん馴染んできています。どんだけ愛に溢れてるんや！！！っていつもすごい思います。</p>
+        <span class="voice-tag">▷ セッション後も続く変化・現実が呼応し始める</span>
+      </div>
+
+      <div class="voice-card fi">
+        <p class="voice-hl">「やっぱり私は普通の星の下には生まれてないんだなぁ。そこを認めて楽しんだ勝ち！」</p>
+        <p class="voice-body">それをやりたくて生まれてきたんだから、逃げずにやろう——革命道中。私がいつも人と違うアイデアが浮かび、行動してしまうのも、持って生まれた才能なんだなぁと。ワクワクしてきた！</p>
+        <span class="voice-tag">▷ 才能の自覚・使命への覚悟</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CHANGES -->
+<section class="section changes">
+  <div class="inner fi">
+    <span class="label">What changes after</span>
+    <h2 class="serif">このセッションのあと、<br>起きる変化</h2>
+    <ul class="changes-list">
+      <li>自分の感覚を、信じていいと分かる</li>
+      <li>ありたい自分の方向に、迷わず舵を切れる</li>
+      <li>迷いに使っていたエネルギーが、前に進む力に変わる</li>
+      <li>「動けない自分」を、責めなくなる</li>
+      <li>無理に頑張らなくても、流れに乗りやすくなる</li>
+      <li>「私の感覚で決めていい」という、揺るがない基準が残る</li>
+    </ul>
+    <div class="changes-note">
+      <p>これは、一時的な気づきではありません。<br>これから先、何度迷っても立ち返れる<strong>「自分の羅針盤」</strong>を手にする感覚です。</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOR WHO -->
+<section class="section forwho">
+  <div class="inner fi">
+    <span class="label">This session is for you if…</span>
+    <h2 class="serif">ひとつでも当てはまるなら、<br>このセッションの<br>「タイミング」です。</h2>
+    <ul class="forwho-list">
+      <li>方向性に迷っている</li>
+      <li>同じ課題にぶつかる</li>
+      <li>正解探しをして立ち止まってしまう</li>
+      <li>がんばってきたのに満たされていない</li>
+      <li>やるべきことは分かるのに、動けない</li>
+      <li>才能を活かして生きていきたい</li>
+      <li>人の期待ではなく、自分の基準で選びたい</li>
+      <li>魂が喜ぶ人生を生きたい</li>
+    </ul>
+    <p class="forwho-close">自分の才能・資質を活かして、<br>迷わず進みたい。<br>そのすべてに、このセッションは答えます。</p>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section about">
+  <div class="inner fi">
+    <span class="label">Navigator</span>
+    <h2 class="serif">ナビゲーター紹介</h2>
+    <div class="about-box">
+      <div class="about-avatar" id="avatarWrap" onclick="document.getElementById('photoInput').click()" title="クリックして写真をアップロード">
+        <img id="avatarImg" src="" alt="" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:50%;">
+        <span id="avatarInitial">K</span>
+        <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="loadPhoto(event)">
+      </div>
+      <div class="about-text">
+        <h3>大蔵ケイ</h3>
+        <p>わたしは、答えを教える人ではありません。あなた自身の心の声が聴こえる状態へ導く、人生のナビゲーターです。</p>
+        <p>最終的に選ぶのは、いつもあなた。依存ではなく、自立。それがPrism Voice Sessionの在り方です。</p>
+        <p>「ことばの優しさに包まれて、握りしめていたものが、ふわっと自然にほどけて入ってくる」——クライアントの方から、よくそう言っていただきます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSE COPY -->
+<section class="close-copy">
+  <div class="close-inner fi">
+    <h2>
+      もう、無理に探さなくていい。<br>
+      もう、誰かの正解に合わせなくていい。<br>
+      <br>
+      本当の声は、<br>
+      あなたをちゃんと<br>
+      導いてくれる。
+    </h2>
+    <p>
+      Prism Voice Sessionは、<br>
+      あなたの魂が喜ぶ羅針盤を<br>
+      思い出すための時間。<br><br>
+      あなたの魂の本音を、共に確認していく時間を<br>
+      楽しみにしています。
+    </p>
+    <p style="font-family:'Shippori Mincho',serif; font-size:18px; font-weight:600; color:var(--deep);">大蔵ケイ</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-box fi">
+    <span class="label">Prism Voice Session</span>
+    <h2>あなたの才能と資質が、<br>迷わず輝き出す90分</h2>
+    <div class="price">¥22,000</div>
+    <p class="price-note">オンライン ／ 90分</p>
+    <a href="https://www.reservestock.jp/page/event_series/119635" target="_blank" rel="noopener" class="btn">セッションを申し込む →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Prism Voice Session</div>
+  <p>© 2025 大蔵ケイ. All rights reserved.</p>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => { if(e.isIntersecting) e.target.classList.add('on'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fi').forEach(el => io.observe(el));
+
+  function loadPhoto(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = document.getElementById('avatarImg');
+      const initial = document.getElementById('avatarInitial');
+      img.src = e.target.result;
+      img.style.display = 'block';
+      initial.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+</script>
+</body>
+</html>
