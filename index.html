@@ -26,9 +26,11 @@
     background: var(--cream);
     color: var(--text);
     font-family: 'Zen Kaku Gothic New', sans-serif;
-    font-weight: 300;
+    font-weight: 400;
     font-size: 18px;
+    line-height: 1.9;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 
   /* ── HERO ── */
@@ -50,17 +52,19 @@
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 80% 60% at 50% 30%, rgba(201,169,110,0.12) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,169,110,0.07) 0%, transparent 60%);
+      radial-gradient(ellipse 70% 50% at 50% 20%, rgba(255,220,150,0.18) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 40% at 80% 70%, rgba(201,169,110,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,200,120,0.08) 0%, transparent 60%);
   }
 
   .hero-ornament {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: clamp(16px, 2.5vw, 22px);
+    font-size: clamp(20px, 3vw, 28px);
     color: var(--gold);
     letter-spacing: 0.3em;
     margin-bottom: 40px;
+    line-height: 1.8;
     opacity: 0;
     animation: fadeUp 1s ease forwards 0.3s;
   }
@@ -99,7 +103,7 @@
     font-style: italic;
     font-size: clamp(36px, 7vw, 72px);
     font-weight: 700;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.95);
     letter-spacing: 0.08em;
     margin-top: -16px;
     margin-bottom: 48px;
@@ -213,11 +217,11 @@
   .pain-list li {
     padding: 20px 0 20px 28px;
     border-bottom: 1px solid rgba(201,169,110,0.2);
-    font-size: clamp(14px, 2vw, 16px);
-    line-height: 1.8;
-    color: var(--brown-mid);
+    font-size: clamp(16px, 2vw, 18px);
+    line-height: 1.9;
+    color: var(--brown);
     position: relative;
-    font-weight: 400;
+    font-weight: 500;
   }
 
   .pain-list li::before {
@@ -265,6 +269,18 @@
     background: var(--dark);
     color: #fff;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .program-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,220,150,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 90% 100%, rgba(201,169,110,0.08) 0%, transparent 60%);
+    pointer-events: none;
   }
 
   .program-section .section-title { color: #fff; }
@@ -319,10 +335,10 @@
   }
 
   .step-desc {
-    font-size: 15px;
+    font-size: 16px;
     color: rgba(255,255,255,0.95);
     line-height: 1.9;
-    font-weight: 300;
+    font-weight: 400;
   }
 
   /* ── WHAT YOU GET ── */
@@ -360,9 +376,9 @@
   }
 
   .detail-body {
-    font-size: 14px;
-    color: var(--text-light);
-    line-height: 1.9;
+    font-size: 16px;
+    color: var(--brown-mid);
+    line-height: 2;
     font-weight: 400;
   }
 
@@ -434,7 +450,7 @@
     color: rgba(255,255,255,0.95);
     position: relative;
     padding-left: 44px;
-    font-weight: 300;
+    font-weight: 400;
   }
 
   .forwho-list li::before {
@@ -559,7 +575,7 @@
   .cta-limit {
     margin-top: 28px;
     font-size: 13px;
-    color: rgba(255,255,255,0.4);
+    color: rgba(255,255,255,0.85);
     letter-spacing: 0.1em;
   }
 
@@ -741,7 +757,7 @@
 
 <!-- HERO -->
 <section class="hero">
-  <p class="hero-ornament">Joyfulness Academy — 1 on 1 Program</p>
+  <p class="hero-ornament">Joyfulness Academy<br>1 on 1 Program</p>
   <p class="hero-catch">
     あなたの人生に、ただひとりのナビゲーターがつく。<br>
     大蔵ケイと二人で、あなただけの6ヶ月を進んでいく。
@@ -754,6 +770,9 @@
   <div class="hero-badge">
     <span class="hero-badge-label">New Format</span>
     <span class="hero-badge-main">完全マンツーマン制　始動</span>
+  </div>
+  <div style="margin-top:40px; opacity:0; animation: fadeUp 1s ease forwards 1.8s;">
+    <a href="https://www.reservestock.jp/page/event_series/Yzg3MDJlM2FmN" class="cta-btn" target="_blank">無料個別相談＆案内会に申し込む</a>
   </div>
   <div class="hero-line"></div>
 </section>
@@ -854,6 +873,9 @@
         <div class="step-title">人間パワースポットへ</div>
         <p class="step-desc">6ヶ月の統合。ケイさんがいなくても自走できる自分の完成。周りの人たちも元気にしていく存在へ。</p>
       </div>
+    </div>
+    <div class="reveal" style="text-align:center; margin-top:56px;">
+      <a href="https://www.reservestock.jp/page/event_series/Yzg3MDJlM2FmN" class="cta-btn" target="_blank">無料個別相談＆案内会に申し込む</a>
     </div>
   </div>
 </section>
