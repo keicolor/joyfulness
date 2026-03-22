@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ケイのInstagram管理ツール</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+    background: #fdf6f3;
+    color: #333;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #f09080, #e87868);
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  header h1 { font-size: 20px; font-weight: bold; }
+  header p { font-size: 12px; opacity: 0.85; margin-top: 4px; }
+
+  .tabs {
+    display: flex;
+    background: #fff;
+    border-bottom: 2px solid #f0d8d0;
+    overflow-x: auto;
+  }
+  .tab {
+    flex: 1;
+    min-width: 80px;
+    padding: 12px 8px;
+    text-align: center;
+    font-size: 12px;
+    cursor: pointer;
+    color: #999;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab.active {
+    color: #e87868;
+    border-bottom-color: #e87868;
+    font-weight: bold;
+  }
+
+  .section { display: none; padding: 16px; }
+  .section.active { display: block; }
+
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 15px;
+    color: #e87868;
+    margin-bottom: 12px;
+    font-weight: bold;
+  }
+
+  /* フォロワー記録 */
+  .follower-display {
+    text-align: center;
+    padding: 16px 0;
+  }
+  .follower-number {
+    font-size: 52px;
+    font-weight: bold;
+    color: #e87868;
+  }
+  .follower-goal {
+    font-size: 13px;
+    color: #999;
+    margin-top: 4px;
+  }
+  .progress-bar {
+    background: #f0d8d0;
+    border-radius: 20px;
+    height: 12px;
+    margin: 12px 0;
+    overflow: hidden;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, #f09080, #e87868);
+    height: 100%;
+    border-radius: 20px;
+    transition: width 0.5s;
+  }
+  .follower-input-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .follower-input-row input {
+    flex: 1;
+    padding: 10px;
+    border: 1.5px solid #f0d8d0;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: center;
+  }
+  .btn {
+    background: #e87868;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .btn:active { opacity: 0.8; }
+  .btn-outline {
+    background: white;
+    color: #e87868;
+    border: 1.5px solid #e87868;
+  }
+
+  /* 履歴 */
+  .history-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #f5ece8;
+    font-size: 13px;
+  }
+  .history-item:last-child { border-bottom: none; }
+  .history-diff { color: #e87868; font-weight: bold; }
+
+  /* 投稿チェックリスト */
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f5ece8;
+    cursor: pointer;
+  }
+  .checklist-item:last-child { border-bottom: none; }
+  .check-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #f0d8d0;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .check-circle.checked {
+    background: #e87868;
+    border-color: #e87868;
+    color: white;
+  }
+  .check-circle.checked::after { content: '✓'; font-size: 13px; }
+  .check-label { font-size: 14px; }
+  .check-label.checked { text-decoration: line-through; color: #bbb; }
+
+  /* ネタストック */
+  .neta-item {
+    background: #fdf6f3;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-left: 3px solid #e87868;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .neta-text { flex: 1; }
+  .neta-status {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    margin-left: 8px;
+    flex-shrink: 0;
+  }
+  .neta-status.todo { background: #f0d8d0; color: #e87868; }
+  .neta-status.done { background: #d8f0e8; color: #4caf50; }
+  .neta-add {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .neta-add input {
+    flex: 1;
+    padding: 10px;
+    border: 1.5px solid #f0d8d0;
+    border-radius: 8px;
+    font-size: 13px;
+  }
+
+  /* 赤文字チェック */
+  .red-check-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #f5ece8;
+    font-size: 13px;
+  }
+  .red-check-item:last-child { border-bottom: none; }
+  .slide-label {
+    font-weight: bold;
+    color: #e87868;
+    margin-bottom: 4px;
+  }
+  .red-word {
+    display: inline-block;
+    background: #fff0ee;
+    color: #e87868;
+    border: 1px solid #f0d8d0;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 12px;
+    margin: 2px;
+  }
+
+  /* 成長グラフ */
+  .graph-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+  canvas { display: block; }
+
+  .milestone {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f5ece8;
+    font-size: 13px;
+  }
+  .milestone-icon { font-size: 20px; }
+  .milestone-done { color: #4caf50; font-weight: bold; }
+  .milestone-todo { color: #bbb; }
+
+  .reset-btn {
+    font-size: 11px;
+    color: #bbb;
+    text-align: right;
+    cursor: pointer;
+    padding: 4px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🌸 ケイのInstagram管理ツール</h1>
+  <p>更年期の脱・いい人専門家 大蔵ケイ</p>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('follower')">📊 フォロワー</div>
+  <div class="tab" onclick="showTab('checklist')">✅ 投稿前</div>
+  <div class="tab" onclick="showTab('neta')">💡 ネタ</div>
+  <div class="tab" onclick="showTab('red')">🔴 赤文字</div>
+  <div class="tab" onclick="showTab('milestone')">🏆 目標</div>
+  <div class="tab" onclick="showTab('reel')">🎬 リール</div>
+</div>
+
+<!-- フォロワー記録 -->
+<div id="tab-follower" class="section active">
+  <div class="card">
+    <h2>📊 フォロワー記録</h2>
+    <div class="follower-display">
+      <div class="follower-number" id="currentFollower">716</div>
+      <div class="follower-goal">目標：1,000人</div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 71.6%"></div>
+      </div>
+      <div style="font-size:12px;color:#999">あと <span id="remaining">284</span> 人</div>
+    </div>
+    <div class="follower-input-row">
+      <input type="number" id="followerInput" placeholder="今日の人数" />
+      <button class="btn" onclick="updateFollower()">更新</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📈 記録履歴</h2>
+    <div id="historyList">
+      <div class="history-item">
+        <span>開始時</span>
+        <span>700人</span>
+        <span class="history-diff">-</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 投稿前チェックリスト -->
+<div id="tab-checklist" class="section">
+  <div class="card">
+    <h2>✅ 投稿前チェックリスト</h2>
+    <div id="checklistItems"></div>
+    <div style="margin-top:12px;text-align:right">
+      <span class="reset-btn" onclick="resetChecklist()">リセット</span>
+    </div>
+  </div>
+</div>
+
+<!-- ネタストック -->
+<div id="tab-neta" class="section">
+  <div class="card">
+    <h2>💡 ネタストック</h2>
+    <div id="netaList"></div>
+    <div class="neta-add">
+      <input type="text" id="netaInput" placeholder="新しいネタを追加..." />
+      <button class="btn" onclick="addNeta()">追加</button>
+    </div>
+  </div>
+</div>
+
+<!-- 赤文字チェック -->
+<div id="tab-red" class="section">
+  <div class="card">
+    <h2>🔴 赤文字ルール</h2>
+    <p style="font-size:12px;color:#999;margin-bottom:12px">各スライドで赤にする言葉の目安</p>
+    <div class="red-check-item">
+      <div class="slide-label">2枚目</div>
+      <div>場面を描写するキーワード<br><span class="red-word">顔色</span><span class="red-word">すみません</span><span class="red-word">謝る</span></div>
+    </div>
+    <div class="red-check-item">
+      <div class="slide-label">3枚目</div>
+      <div>感情を表す言葉<br><span class="red-word">傷ついている</span><span class="red-word">イライラ</span><span class="red-word">どっと</span></div>
+    </div>
+    <div class="red-check-item">
+      <div class="slide-label">4枚目</div>
+      <div>問いかけの核心ワード<br><span class="red-word">気を張ってた</span><span class="red-word">怒られる</span><span class="red-word">本音</span></div>
+    </div>
+    <div class="red-check-item">
+      <div class="slide-label">5枚目</div>
+      <div>読者が最も刺さる一語<br><span class="red-word">嫌われないように</span><span class="red-word">正直</span></div>
+    </div>
+    <div class="red-check-item">
+      <div class="slide-label">6枚目</div>
+      <div>背中を押す言葉<br><span class="red-word">息、止めてない？</span><span class="red-word">いいんだよ</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- マイルストーン -->
+<div id="tab-milestone" class="section">
+  <div class="card">
+    <h2>🏆 マイルストーン</h2>
+    <div class="milestone">
+      <span class="milestone-icon">✅</span>
+      <div>
+        <div class="milestone-done">700人達成</div>
+        <div style="font-size:11px;color:#999">フィード投稿スタート</div>
+      </div>
+    </div>
+    <div class="milestone">
+      <span class="milestone-icon">🎯</span>
+      <div>
+        <div>800人</div>
+        <div style="font-size:11px;color:#999">あと <span id="to800"></span> 人</div>
+      </div>
+    </div>
+    <div class="milestone">
+      <span class="milestone-icon">🎯</span>
+      <div>
+        <div>900人</div>
+        <div style="font-size:11px;color:#999">あと <span id="to900"></span> 人</div>
+      </div>
+    </div>
+    <div class="milestone">
+      <span class="milestone-icon">🏆</span>
+      <div>
+        <div style="font-weight:bold">1,000人達成！</div>
+        <div style="font-size:11px;color:#999">全コンテンツ満席行列へ</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📋 毎日やること</h2>
+    <div style="font-size:13px;line-height:2">
+      1. フィード投稿（毎日）<br>
+      2. 投稿直後にストーリーズでシェア<br>
+      3. インサイト確認（3日ごと）<br>
+      4. フォロワー数を記録
+    </div>
+  </div>
+</div>
+
+<!-- リール -->
+<div id="tab-reel" class="section">
+  <div class="card">
+    <h2>🎬 リール投稿前チェック</h2>
+    <div id="reelChecklistItems"></div>
+    <div style="margin-top:12px;text-align:right">
+      <span class="reset-btn" onclick="resetReelChecklist()">リセット</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>💡 リールのコツ</h2>
+    <div style="font-size:13px;line-height:2.2;color:#555">
+      🎯 最初の<b>3秒</b>が全て。冒頭で問いかける<br>
+      📝 テロップは大きく・少なく<br>
+      🎵 BGMは著作権フリーを使う<br>
+      ⏱ 15〜30秒が最も拡散されやすい<br>
+      📲 縦型<b>9:16</b>で撮影する<br>
+      📌 投稿後すぐストーリーズでシェア<br>
+      🔁 カルーセルと同じテーマで作るとラク
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎬 リールネタストック</h2>
+    <div id="reelNetaList"></div>
+    <div class="neta-add">
+      <input type="text" id="reelNetaInput" placeholder="リールのネタを追加..." />
+      <button class="btn" onclick="addReelNeta()">追加</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // データ
+  let data = JSON.parse(localStorage.getItem('kei_insta') || '{}');
+  if (!data.follower) data.follower = 716;
+  if (!data.history) data.history = [{date: '開始', count: 700, diff: '-'}];
+  if (!data.checklist) data.checklist = [false,false,false,false,false,false,false];
+  if (!data.reelChecklist) data.reelChecklist = [false,false,false,false,false,false,false,false];
+  if (!data.reelNeta) data.reelNeta = [];
+  if (!data.neta) data.neta = [
+    {text: '我慢・いい人系', done: true},
+    {text: '更年期のイライラ', done: true},
+    {text: 'ごめんが口癖', done: true},
+    {text: '人といると疲れる', done: true},
+    {text: '損な役回り', done: true},
+  ];
+
+  const checkItems = [
+    '1枚目：スクロールが止まるキャッチになっているか',
+    '2〜6枚目：赤文字を入れたか',
+    '7枚目：テーマに合ったCTAになっているか',
+    'キャプション：クライアントの言葉で書いているか',
+    'ハッシュタグ：3〜5個入れたか',
+    '投稿後：ストーリーズでシェアしたか',
+    'フォロワー数：記録したか',
+  ];
+
+  function save() {
+    localStorage.setItem('kei_insta', JSON.stringify(data));
+  }
+
+  function showTab(name) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function updateFollower() {
+    const val = parseInt(document.getElementById('followerInput').value);
+    if (!val || val < 1) return;
+    const diff = val - data.follower;
+    const today = new Date().toLocaleDateString('ja-JP', {month:'numeric',day:'numeric'});
+    data.history.unshift({date: today, count: val, diff: diff >= 0 ? '+' + diff : diff});
+    data.follower = val;
+    save();
+    renderFollower();
+    document.getElementById('followerInput').value = '';
+  }
+
+  function renderFollower() {
+    document.getElementById('currentFollower').textContent = data.follower.toLocaleString();
+    const pct = Math.min((data.follower / 1000) * 100, 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('remaining').textContent = Math.max(1000 - data.follower, 0);
+    document.getElementById('to800').textContent = Math.max(800 - data.follower, 0);
+    document.getElementById('to900').textContent = Math.max(900 - data.follower, 0);
+
+    const list = document.getElementById('historyList');
+    list.innerHTML = data.history.map(h => `
+      <div class="history-item">
+        <span>${h.date}</span>
+        <span>${h.count.toLocaleString()}人</span>
+        <span class="history-diff">${h.diff}</span>
+      </div>
+    `).join('');
+  }
+
+  function renderChecklist() {
+    const container = document.getElementById('checklistItems');
+    container.innerHTML = checkItems.map((item, i) => `
+      <div class="checklist-item" onclick="toggleCheck(${i})">
+        <div class="check-circle ${data.checklist[i] ? 'checked' : ''}"></div>
+        <div class="check-label ${data.checklist[i] ? 'checked' : ''}">${item}</div>
+      </div>
+    `).join('');
+  }
+
+  function toggleCheck(i) {
+    data.checklist[i] = !data.checklist[i];
+    save();
+    renderChecklist();
+  }
+
+  function resetChecklist() {
+    data.checklist = data.checklist.map(() => false);
+    save();
+    renderChecklist();
+  }
+
+  function renderNeta() {
+    const list = document.getElementById('netaList');
+    list.innerHTML = data.neta.map((n, i) => `
+      <div class="neta-item">
+        <div class="neta-text">${n.text}</div>
+        <span class="neta-status ${n.done ? 'done' : 'todo'}" onclick="toggleNeta(${i})">${n.done ? '投稿済' : '未投稿'}</span>
+      </div>
+    `).join('');
+  }
+
+  function toggleNeta(i) {
+    data.neta[i].done = !data.neta[i].done;
+    save();
+    renderNeta();
+  }
+
+  function addNeta() {
+    const val = document.getElementById('netaInput').value.trim();
+    if (!val) return;
+    data.neta.push({text: val, done: false});
+    save();
+    renderNeta();
+    document.getElementById('netaInput').value = '';
+  }
+
+  const reelCheckItems = [
+    '冒頭3秒：問いかけで始まっているか',
+    '縦型9:16で撮影しているか',
+    'テロップは大きく・少なくなっているか',
+    'BGMは著作権フリーか',
+    '15〜30秒に収まっているか',
+    'ハッシュタグ3〜5個入れたか',
+    'キャプションは書いたか',
+    '投稿後：ストーリーズでシェアしたか',
+  ];
+
+  function renderReelChecklist() {
+    const container = document.getElementById('reelChecklistItems');
+    container.innerHTML = reelCheckItems.map((item, i) => `
+      <div class="checklist-item" onclick="toggleReelCheck(${i})">
+        <div class="check-circle ${data.reelChecklist[i] ? 'checked' : ''}"></div>
+        <div class="check-label ${data.reelChecklist[i] ? 'checked' : ''}">${item}</div>
+      </div>
+    `).join('');
+  }
+
+  function toggleReelCheck(i) {
+    data.reelChecklist[i] = !data.reelChecklist[i];
+    save();
+    renderReelChecklist();
+  }
+
+  function resetReelChecklist() {
+    data.reelChecklist = data.reelChecklist.map(() => false);
+    save();
+    renderReelChecklist();
+  }
+
+  function renderReelNeta() {
+    const list = document.getElementById('reelNetaList');
+    if (!list) return;
+    list.innerHTML = data.reelNeta.length === 0
+      ? '<div style="font-size:13px;color:#bbb;padding:8px 0">まだネタがありません</div>'
+      : data.reelNeta.map((n, i) => `
+        <div class="neta-item">
+          <div class="neta-text">${n.text}</div>
+          <span class="neta-status ${n.done ? 'done' : 'todo'}" onclick="toggleReelNeta(${i})">${n.done ? '投稿済' : '未投稿'}</span>
+        </div>
+      `).join('');
+  }
+
+  function toggleReelNeta(i) {
+    data.reelNeta[i].done = !data.reelNeta[i].done;
+    save();
+    renderReelNeta();
+  }
+
+  function addReelNeta() {
+    const val = document.getElementById('reelNetaInput').value.trim();
+    if (!val) return;
+    data.reelNeta.push({text: val, done: false});
+    save();
+    renderReelNeta();
+    document.getElementById('reelNetaInput').value = '';
+  }
+
+  // 初期化
+  renderFollower();
+  renderChecklist();
+  renderNeta();
+  renderReelChecklist();
+  renderReelNeta();
+</script>
+</body>
+</html>
